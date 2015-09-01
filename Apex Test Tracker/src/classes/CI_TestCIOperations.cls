@@ -31,6 +31,9 @@ public class CI_TestCIOperations {
 		    	DateTime.Now().addSeconds(10)), 
 	            new CI_ScheduledDispatcher());
         Test.stopTest();
+		CI_Configuration__c	config = CI_Configuration__c.getInstance('default');
+		system.Assert(config!=null);
+        
     }
 
 	// Test with actual config created
@@ -51,6 +54,12 @@ public class CI_TestCIOperations {
 		    	DateTime.Now().addSeconds(10)), 
 	            new CI_ScheduledDispatcher());
         Test.stopTest();
+
+		List<CI_TestResult__c> savedTestRecords = 
+			[Select ID	from CI_TestResult__c]; 
+		// This test can't run tests, so there should be no data
+		system.assert(savedTestRecords.size()==0);
+        
     }    
     
     public static string getManagedPrefix()
