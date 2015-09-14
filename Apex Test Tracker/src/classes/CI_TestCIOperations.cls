@@ -31,7 +31,7 @@ public class CI_TestCIOperations {
 		    	DateTime.Now().addSeconds(10)), 
 	            new CI_ScheduledDispatcher());
         Test.stopTest();
-		CI_Configuration__c	config = CI_Configuration__c.getInstance('default');
+		CI_Configuration__c	config = CI_ConfigWrapper.loadConfig('default');
 		system.Assert(config!=null);
         
     }
