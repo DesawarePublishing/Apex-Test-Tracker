@@ -1,5 +1,0 @@
-New Apex errors have been detected during routine testing in organization: {!Organization.Name}  org ID: {!Organization.Id}
-
-Details are as follows:
-
-{!CI_TestResult__c.Message__c}

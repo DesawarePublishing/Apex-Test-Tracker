@@ -1,0 +1,13 @@
+{
+    "orgName": "Apex Test Tracker by Desaware Publishing",
+    "edition": "Developer",
+    "hasSampleData": "true",
+    "description": "Apex Test Tracker Scratch Org",
+    "settings": {
+        "orgPreferenceSettings" : {
+                "s1DesktopEnabled": true,
+                "disableParallelApexTesting": false
+            }
+    },
+	"features" : ["AuthorApex","API"]
+}

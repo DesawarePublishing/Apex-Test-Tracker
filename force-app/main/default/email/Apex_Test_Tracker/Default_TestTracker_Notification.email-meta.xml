@@ -7,4 +7,5 @@
     <style>none</style>
     <subject>One or more new Apex unit test errors have been detected</subject>
     <type>text</type>
+    <uiType>Aloha</uiType>
 </EmailTemplate>

@@ -26,6 +26,7 @@ SOFTWARE.
 
 public with sharing class CI_NotTestClass {
 
+	@testvisible
 	private void notatest()
 	{
 		
