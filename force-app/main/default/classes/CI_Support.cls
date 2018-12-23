@@ -222,11 +222,11 @@ public without sharing class CI_Support implements CI_ScheduledDispatcher.ISched
 		)
 	{
 		// Grab all current test results. There will only be one for each class/method, so we don't
-		// have to worry about limits
+		// have to worry about limits. Only look at the requested namespace
 		List<CI_TestResult__c> savedTestRecords = 
 			[Select ID, ClassID__c, Test_Name__c, Pass__c, CreatedDate 
 			from CI_TestResult__c 
-			where ClassID__c!=null Order By CreatedDate Desc];
+			where ClassID__c!=null AND Namespace__c = :config.Name Order By CreatedDate Desc];
 		
 		Map<String, CI_TestResult__c> savedTestRecordMap = 
 			new Map<String, CI_TestResult__c>();
