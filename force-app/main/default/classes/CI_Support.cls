@@ -1,6 +1,6 @@
 /*The MIT License (MIT)
 
-Copyright (c) 2015 Desaware Inc.
+Copyright (c) 2015-2019 Desaware Inc.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -201,7 +201,7 @@ public without sharing class CI_Support implements CI_ScheduledDispatcher.ISched
 		// accumulating data
 		Integer archiveDays = (config.Archive_Days__c==null || config.Archive_Days__c<1)? 1: config.Archive_Days__c.intValue(); 
 		DateTime oldestSummary = DateTime.Now().AddDays(-archiveDays);
-		List<CI_TestResult__c> recordsToDelete = [Select ID from CI_TestResult__c where ClassID__c = null And CreatedDate < :oldestSummary];
+		List<CI_TestResult__c> recordsToDelete = [Select ID from CI_TestResult__c where ClassID__c = null And CreatedDate < :oldestSummary Limit 200];
 		if(recordsToDelete.size()>0) delete recordsToDelete;
 		
 		config.Last_Test_Request__c = DateTime.Now();
@@ -303,7 +303,6 @@ public without sharing class CI_Support implements CI_ScheduledDispatcher.ISched
 		CI_TestResult__c newSummary = 
 			new CI_TestResult__c(Message__c = errorMessage);
 		insert newSummary;
-					
 	}
 	
 	// Create a CI_TestResult__c record from a test result
