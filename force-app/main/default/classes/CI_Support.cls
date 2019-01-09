@@ -57,7 +57,11 @@ public without sharing class CI_Support implements CI_ScheduledDispatcher.ISched
 		}
 		whereTerm += ' ApexClassId in :testClassIDs ';
 		
-		String queryTerm = 'Select ApexClassId, MethodName, Outcome, Message, TestTimestamp from ApexTestResult ' + whereTerm + ' Order By TestTimestamp Desc';
+		// Reserve SOQL queries for test results - subtract the max result record count from limits, then divide by two as we call this function twice
+		Integer reserve = (Limits.getLimitQueryRows() - testClassIDs.size() * 10)/2;
+		if(reserve < 10000) reserve = 10000;	// But be sure to allow a generous minimum
+		
+		String queryTerm = 'Select ApexClassId, MethodName, Outcome, Message, TestTimestamp from ApexTestResult ' + whereTerm + ' Order By TestTimestamp Desc Limit :reserve';
 		
 		List<ApexTestResult> result = (List<ApexTestResult>)Database.Query(queryTerm);
 		
@@ -208,9 +212,6 @@ public without sharing class CI_Support implements CI_ScheduledDispatcher.ISched
 		CI_ConfigWrapper.saveConfig(config);
 		queueTests(runTestClassIds);	// Run all tests
 
-
-
-		
 	}
 	
 	
@@ -227,7 +228,7 @@ public without sharing class CI_Support implements CI_ScheduledDispatcher.ISched
 			[Select ID, ClassID__c, Test_Name__c, Pass__c, CreatedDate 
 			from CI_TestResult__c 
 			where ClassID__c!=null AND Namespace__c = :config.Name Order By CreatedDate Desc];
-		
+
 		Map<String, CI_TestResult__c> savedTestRecordMap = 
 			new Map<String, CI_TestResult__c>();
 
