@@ -1,6 +1,6 @@
 /*The MIT License (MIT)
 
-Copyright (c) 2015-2019 Desaware Inc.
+Copyright (c) 2015-2022 Desaware Inc.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -34,6 +34,8 @@ global without sharing class CI_ScheduledDispatcher Implements Schedulable {
     
     global void execute(SchedulableContext sc) 
     {
+        // The main scheduler needs the necessary permission to run unit tests, but access permissions aren't set during the unit test
+        if(!Test.isRunningTest() && !isOkToRun()) return;
         Type targettype = Type.forName('CI_Support');   
         if(targettype!=null) {
             IScheduleDispatched obj = (IScheduleDispatched)targettype.NewInstance();
@@ -50,8 +52,15 @@ global without sharing class CI_ScheduledDispatcher Implements Schedulable {
     */
     global static void executeNow()
     {
+        if(!isOkToRun()) return;
     	CI_ScheduledDispatcher schedObj = new CI_ScheduledDispatcher();
     	schedObj.execute(null);
     }
     
+    private static Boolean isOkToRun()
+    {
+        List<UserPermissionAccess> permissions = [Select ID, permissionsviewsetup from UserPermissionAccess];
+        return(permissions.size()>0 && permissions[0].permissionsviewsetup==true);
+    }
+
 }
